@@ -1,20 +1,244 @@
----
-layout: home
-title: 首页
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog</title>
 
-# 👋 你好，我是你的名字
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-🚀 全栈开发者 / AI爱好者  
+<style>
+* {margin:0;padding:0;box-sizing:border-box;}
 
-## 🧠 技能
-- JavaScript / Python
-- AI / 自动化
-- Web 开发
+body {
+  font-family: 'Inter', sans-serif;
+  background: #0B0B0C;
+  color: white;
+  overflow-x: hidden;
+}
 
-## 📦 项目
-- 🔥 项目1（链接）
-- ⚡ 项目2（链接）
+/* ===== 动画 ===== */
+@keyframes fadeUp {
+  from {opacity:0; transform:translateY(30px);}
+  to {opacity:1; transform:translateY(0);}
+}
 
-## 📫 联系我
-- GitHub: https://github.com/你的用户名
+@keyframes glow {
+  0% {box-shadow:0 0 0 rgba(79,70,229,0);}
+  100% {box-shadow:0 0 30px rgba(79,70,229,0.4);}
+}
+
+/* ===== Navbar ===== */
+.navbar {
+  position: sticky;
+  top:0;
+  backdrop-filter: blur(12px);
+  background: rgba(10,10,10,0.6);
+  border-bottom:1px solid #1F1F23;
+}
+
+.nav-inner {
+  max-width:1100px;
+  margin:auto;
+  height:64px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 24px;
+}
+
+.nav-links a {
+  margin-left:24px;
+  color:#A1A1AA;
+  text-decoration:none;
+  transition:0.3s;
+}
+
+.nav-links a:hover {color:white;}
+
+/* ===== Hero ===== */
+.hero {
+  text-align:center;
+  padding:140px 20px 80px;
+}
+
+.hero h1 {
+  font-size:64px;
+  letter-spacing:-0.02em;
+}
+
+.hero h1 span {
+  display:inline-block;
+  opacity:0;
+  animation:fadeUp 0.6s forwards;
+}
+
+.hero p {
+  margin-top:20px;
+  color:#A1A1AA;
+  animation:fadeUp 1s ease forwards;
+}
+
+.hero button {
+  margin-top:30px;
+  padding:12px 26px;
+  border-radius:999px;
+  background:#4F46E5;
+  border:none;
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.hero button:hover {
+  transform:translateY(-3px);
+  animation:glow 0.4s forwards;
+}
+
+/* ===== Grid ===== */
+.grid {
+  max-width:1100px;
+  margin:60px auto;
+  padding:0 24px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:24px;
+}
+
+/* ===== Card ===== */
+.card {
+  background:#111113;
+  border:1px solid #1F1F23;
+  border-radius:20px;
+  padding:24px;
+  transition:all 0.4s;
+  opacity:0;
+  transform:translateY(40px);
+}
+
+.card.visible {
+  animation:fadeUp 0.6s forwards;
+}
+
+.card:hover {
+  transform:translateY(-8px) scale(1.02);
+  border-color:#4F46E5;
+  box-shadow:0 10px 40px rgba(0,0,0,0.6);
+}
+
+.tag {
+  font-size:12px;
+  color:#4F46E5;
+}
+
+.card h3 {
+  margin-top:10px;
+  font-size:20px;
+}
+
+.card p {
+  margin-top:10px;
+  color:#A1A1AA;
+}
+
+.meta {
+  margin-top:16px;
+  font-size:12px;
+  color:#6B7280;
+}
+
+/* ===== Footer ===== */
+.footer {
+  text-align:center;
+  padding:60px;
+  color:#6B7280;
+}
+
+/* ===== Responsive ===== */
+@media(max-width:900px){
+  .grid {grid-template-columns:1fr;}
+  .hero h1 {font-size:42px;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+  <div class="nav-inner">
+    <div>MyBlog</div>
+    <div class="nav-links">
+      <a href="#">Blog</a>
+      <a href="#">Projects</a>
+      <a href="#">About</a>
+    </div>
+  </div>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <h1 id="heroText"></h1>
+  <p>打造极简与技术交汇的个人空间</p>
+  <button>Start Reading</button>
+</section>
+
+<!-- Blog -->
+<section class="grid" id="grid"></section>
+
+<div class="footer">© 2026 Minimal Blog</div>
+
+<script>
+/* ===== Hero 字动画 ===== */
+const text = "Design. Code. Think.";
+const hero = document.getElementById("heroText");
+
+text.split("").forEach((char,i)=>{
+  const span=document.createElement("span");
+  span.textContent=char;
+  span.style.animationDelay = i*0.05+"s";
+  hero.appendChild(span);
+});
+
+/* ===== 模拟 Markdown 数据 ===== */
+const posts = [
+  {tag:"Design",title:"Design System",desc:"打造高级设计系统",date:"5 min"},
+  {tag:"Code",title:"Architecture",desc:"现代架构实践",date:"8 min"},
+  {tag:"Think",title:"Zen Design",desc:"冥想",date:"6 min"},
+];
+
+/* ===== 渲染卡片 ===== */
+const grid = document.getElementById("grid");
+
+posts.forEach((p,i)=>{
+  const card=document.createElement("div");
+  card.className="card";
+  card.innerHTML=`
+    <div class="tag">${p.tag}</div>
+    <h3>${p.title}</h3>
+    <p>${p.desc}</p>
+    <div class="meta">${p.date}</div>
+  `;
+  grid.appendChild(card);
+
+  setTimeout(()=>{
+    card.classList.add("visible");
+  }, i*150);
+});
+
+/* ===== 滚动触发动画 ===== */
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("visible");
+    }
+  });
+});
+
+document.querySelectorAll('.card').forEach(el=>{
+  observer.observe(el);
+});
+</script>
+
+</body>
+</html>
